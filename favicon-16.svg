@@ -1,0 +1,11 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black background -->
+  <rect width="16" height="16" fill="#000000"/>
+  
+  <!-- Initials - simplified for small size -->
+  <text x="3" y="11" font-family="Arial, sans-serif" font-size="6" font-weight="700" fill="#ffffff">S</text>
+  <text x="9" y="11" font-family="Arial, sans-serif" font-size="6" font-weight="700" fill="#ffffff">T</text>
+  
+  <!-- Small accent -->
+  <circle cx="13" cy="3" r="1" fill="#6366f1"/>
+</svg>

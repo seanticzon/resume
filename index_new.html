@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Professional Resume</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Clean Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Framer Motion via CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+    <!-- Splitting.js for text animations -->
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css">
+    <!-- Matter.js for physics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <!-- Anime.js for micro-animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Noise Background -->
+    <div class="noise"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loader" class="loader-minimal">
+        <div class="loader-text mono">
+            <span class="char">L</span>
+            <span class="char">O</span>
+            <span class="char">A</span>
+            <span class="char">D</span>
+            <span class="char">I</span>
+            <span class="char">N</span>
+            <span class="char">G</span>
+        </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" data-section="hero"></div>
+        <div class="scroll-dot" data-section="about"></div>
+        <div class="scroll-dot" data-section="skills"></div>
+        <div class="scroll-dot" data-section="work"></div>
+        <div class="scroll-dot" data-section="education"></div>
+        <div class="scroll-dot" data-section="achievements"></div>
+        <div class="scroll-dot" data-section="contact"></div>
+    </div>
+
+    <div id="app" class="min-h-screen grid-bg">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center justify-center relative">
+            <!-- Floating Elements -->
+            <div class="floating-element" style="top: 10%; left: 10%;"></div>
+            <div class="floating-element" style="top: 20%; right: 15%;"></div>
+            <div class="floating-element" style="bottom: 30%; left: 20%;"></div>
+            
+            <div class="text-center max-w-6xl mx-auto px-4">
+                <div class="mb-8">
+                    <!-- First Names -->
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-2 md:mb-4 text-reveal leading-tight" data-splitting>
+                        {{ personalInfo.firstNames.join(' ') }}
+                    </h1>
+                    <!-- Middle Initial -->
+                    <h1 v-if="personalInfo.middleInitial" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium mb-2 text-reveal opacity-75" data-splitting>
+                        {{ personalInfo.middleInitial }}.
+                    </h1>
+                    <!-- Last Name -->
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-reveal" data-splitting>
+                        {{ personalInfo.lastName }}
+                    </h1>
+                </div>
+                
+                <p class="text-lg sm:text-xl md:text-2xl text-gray-400 mb-8 mono">
+                    {{ personalInfo.title }}
+                </p>
+                
+                <p class="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto mb-12 leading-relaxed px-4">
+                    {{ personalInfo.tagline }}
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <a href="#work" class="btn-minimal magnetic">
+                        View My Work
+                    </a>
+                    <a href="#contact" class="btn-minimal magnetic">
+                        Get In Touch
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <div class="w-px h-20 bg-gradient-to-b from-transparent via-white to-transparent"></div>
+                <p class="mono text-xs mt-4 rotate-90 origin-center">SCROLL</p>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-32 px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-4xl md:text-6xl font-light mb-8 text-reveal" data-splitting>
+                            About Me
+                        </h2>
+                        <div class="space-y-6 text-lg text-gray-300 leading-relaxed text-justify">
+                            <p>{{ about.paragraph1 }}</p>
+                            <p>{{ about.paragraph2 }}</p>
+                            <p>{{ about.paragraph3 }}</p>
+                            <p>{{ about.paragraph4 }}</p>
+                        </div>
+                        
+                        <div class="mt-12 grid grid-cols-2 gap-8">
+                            <div v-for="stat in stats" :key="stat.label" class="text-center">
+                                <div class="text-3xl font-bold mb-2">{{ stat.value }}</div>
+                                <div class="text-sm text-gray-500 mono">{{ stat.label }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="card-minimal p-8 rounded-lg">
+                            <h3 class="text-xl font-medium mb-6">Core Technologies</h3>
+                            <div class="space-y-4">
+                                <div v-for="skill in coreSkills" :key="skill.name" class="space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="mono text-sm">{{ skill.name }}</span>
+                                        <span class="text-xs text-gray-500">{{ skill.level }}%</span>
+                                    </div>
+                                    <div class="skill-meter">
+                                        <div class="skill-meter-fill" :style="{ width: skill.level + '%' }"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-32 px-4 bg-gray-900 bg-opacity-50">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-light text-center mb-16 text-reveal" data-splitting>
+                    Expertise & Tools
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div v-for="category in skillCategories" :key="category.name" 
+                         class="card-minimal p-8 rounded-lg magnetic">
+                        <div class="mb-6">
+                            <i :class="category.icon" class="text-3xl mb-4"></i>
+                            <h3 class="text-xl font-medium">{{ category.name }}</h3>
+                        </div>
+                        <ul class="space-y-3">
+                            <li v-for="skill in category.skills" :key="skill" 
+                                class="text-gray-400 mono text-sm">
+                                {{ skill }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Experience -->
+        <section id="work" class="py-32 px-4">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-light text-center mb-16 text-reveal" data-splitting>
+                    Experience
+                </h2>
+                
+                <div class="space-y-16">
+                    <div v-for="(job, index) in experience" :key="job.id" 
+                         class="grid lg:grid-cols-4 gap-8 items-start">
+                        <div class="lg:col-span-1">
+                            <div class="mono text-sm text-gray-500">{{ job.duration }}</div>
+                            <div class="text-gray-400">{{ job.company }}</div>
+                        </div>
+                        <div class="lg:col-span-3">
+                            <h3 class="text-2xl font-medium mb-4">{{ job.position }}</h3>
+                            <p class="text-gray-300 mb-6">{{ job.description }}</p>
+                            <ul class="space-y-2">
+                                <li v-for="achievement in job.achievements" :key="achievement"
+                                    class="text-gray-400 text-sm flex items-start">
+                                    <span class="w-1 h-1 bg-gray-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    {{ achievement }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section class="py-32 px-4 bg-gray-900 bg-opacity-50">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-light text-center mb-16 text-reveal" data-splitting>
+                    Selected Work
+                </h2>
+                
+                <div class="space-y-24">
+                    <div v-for="(project, index) in projects" :key="project.id"
+                         class="grid lg:grid-cols-2 gap-12 items-center"
+                         :class="{ 'lg:grid-cols-2': index % 2 === 0, 'lg:grid-cols-2': index % 2 === 1 }">
+                        
+                        <div :class="{ 'lg:order-2': index % 2 === 1 }">
+                            <div class="mono text-sm text-gray-500 mb-2">0{{ index + 1 }}</div>
+                            <h3 class="text-3xl font-medium mb-4 glitch" :data-text="project.name">
+                                {{ project.name }}
+                            </h3>
+                            <p class="text-gray-300 mb-6">{{ project.description }}</p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span v-for="tech in project.technologies" :key="tech"
+                                      class="mono text-xs px-3 py-1 border border-gray-700 rounded">
+                                    {{ tech }}
+                                </span>
+                            </div>
+                            <div class="flex gap-4">
+                                <a :href="project.demo" class="text-sm hover:text-gray-300 transition-colors">
+                                    Live Demo ↗
+                                </a>
+                                <a :href="project.github" class="text-sm hover:text-gray-300 transition-colors">
+                                    GitHub ↗
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div :class="{ 'lg:order-1': index % 2 === 1 }" class="relative">
+                            <div class="card-minimal rounded-lg overflow-hidden">
+                                <img :src="project.image" :alt="project.name" 
+                                     class="w-full aspect-video object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section id="education" class="py-32 px-4">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-light text-center mb-16 text-reveal" data-splitting>
+                    Education
+                </h2>
+                
+                <div class="space-y-16">
+                    <div v-for="(edu, index) in education" :key="edu.id" 
+                         class="grid lg:grid-cols-4 gap-8 items-start">
+                        <div class="lg:col-span-1">
+                            <div class="mono text-sm text-gray-500">{{ edu.duration }}</div>
+                            <div class="text-gray-400">{{ edu.institution }}</div>
+                        </div>
+                        <div class="lg:col-span-3">
+                            <h3 class="text-2xl font-medium mb-4">{{ edu.degree }}</h3>
+                            <p class="text-gray-300 mb-6">{{ edu.description }}</p>
+                            <ul class="space-y-2" v-if="edu.highlights">
+                                <li v-for="highlight in edu.highlights" :key="highlight"
+                                    class="text-gray-400 text-sm flex items-start">
+                                    <span class="w-1 h-1 bg-gray-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                    {{ highlight }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section id="achievements" class="py-32 px-4 bg-gray-900 bg-opacity-50">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-light text-center mb-16 text-reveal" data-splitting>
+                    Achievements & Certifications
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div v-for="achievement in achievements" :key="achievement.id" 
+                         class="card-minimal p-8 rounded-lg magnetic">
+                        <div class="mb-6">
+                            <i :class="achievement.icon" class="text-3xl mb-4 text-indigo-400"></i>
+                            <h3 class="text-xl font-medium mb-2">{{ achievement.title }}</h3>
+                            <div class="mono text-sm text-gray-500">{{ achievement.issuer }}</div>
+                            <div class="mono text-xs text-gray-600 mt-1">{{ achievement.date }}</div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">{{ achievement.description }}</p>
+                        <div class="flex flex-wrap gap-2" v-if="achievement.skills">
+                            <span v-for="skill in achievement.skills" :key="skill"
+                                  class="mono text-xs px-2 py-1 bg-gray-800 text-gray-300 rounded">
+                                {{ skill }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="py-32 px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl md:text-6xl font-light mb-8 text-reveal" data-splitting>
+                    Let's Create
+                </h2>
+                <p class="text-xl text-gray-400 mb-12">
+                    Have a project in mind? Let's discuss how we can bring your vision to life.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                    <a :href="'mailto:' + personalInfo.email" class="btn-minimal magnetic">
+                        {{ personalInfo.email }}
+                    </a>
+                    <a :href="'tel:' + personalInfo.phone" class="btn-minimal magnetic">
+                        {{ personalInfo.phone }}
+                    </a>
+                </div>
+                
+                <div class="flex justify-center space-x-8">
+                    <a v-for="social in socialLinks" :key="social.name"
+                       :href="social.url" 
+                       class="text-gray-500 hover:text-white transition-colors magnetic">
+                        <i :class="social.icon" class="text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-8 px-4 border-t border-gray-800">
+            <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="mono text-sm text-gray-500 text-center sm:text-left">
+                    © 2025 {{ personalInfo.firstNames.join(' ') }} {{ personalInfo.middleInitial ? personalInfo.middleInitial + '.' : '' }} {{ personalInfo.lastName }}
+                </p>
+                <p class="mono text-sm text-gray-500">
+                    Made with precision
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
