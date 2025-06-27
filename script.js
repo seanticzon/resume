@@ -26,7 +26,7 @@ createApp({
             ],
             coreSkills: [
                 { name: "Full Stack Web Development", level: 90 },
-                { name: "Python & Data Engineering", level: 85 },
+                { name: "Python & Data Analytics", level: 85 },
                 { name: "Natural Language Processing", level: 80 },
                 { name: "PHP & Laravel", level: 83 },
                 { name: "JavaScript / Vue.js", level: 88 },
